@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kéo Tâm Pro">
+<title>Hỗ Trợ Kéo Tâm Pro v3</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: -apple-system, sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    border: 1px solid rgba(0,255,255,0.3);
+    box-shadow: 0 0 30px rgba(0,255,255,0.2);
+  }
+  .header h1 {
+    font-size: 22px;
+    background: linear-gradient(90deg, #00f5ff, #ff00e5, #00ff88);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: glow 3s infinite alternate;
+  }
+  @keyframes glow {
+    from { filter: drop-shadow(0 0 5px #00f5ff); }
+    to   { filter: drop-shadow(0 0 15px #ff00e5); }
+  }
+  .status {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #00ff88;
+    font-weight: bold;
+  }
+  .status::before { content: "● "; animation: blink 1s infinite; }
+  @keyframes blink { 50% { opacity: 0.3; } }
+
+  .launch-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .launch-btn {
+    padding: 22px 10px;
+    border-radius: 18px;
+    border: none;
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .launch-btn:active { transform: scale(0.95); }
+  .btn-ffmax {
+    background: linear-gradient(145deg, #ff4500, #ff8c00);
+    box-shadow: 0 0 25px rgba(255,69,0,0.5);
+  }
+  .btn-ffthuong {
+    background: linear-gradient(145deg, #ff0066, #ff00cc);
+    box-shadow: 0 0 25px rgba(255,0,102,0.5);
+  }
+  .launch-btn .icon { font-size: 28px; }
+  .launch-btn .label { font-size: 13px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .btn {
+    padding: 20px 10px;
+    border-radius: 16px;
+    border: 2px solid rgba(0,255,255,0.4);
+    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 15px rgba(0,255,255,0.15);
+  }
+  .btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 25px rgba(0,255,255,0.6);
+  }
+  .btn.on {
+    background: linear-gradient(145deg, #00ff88, #00c853);
+    border-color: #00ff88;
+    color: #000;
+    box-shadow: 0 0 25px rgba(0,255,255,0.8);
+  }
+  .btn .icon { font-size: 24px; display: block; margin-bottom: 5px; }
+  .btn .state { font-size: 11px; opacity: 0.8; margin-top: 4px; }
+
+  /* Nút đặc biệt */
+  .btn-special {
+    background: linear-gradient(145deg, #7b2ff7, #f107a3);
+    border-color: #ff00e5;
+    box-shadow: 0 0 25px rgba(255,0,229,0.5);
+  }
+  .btn-price {
+    background: linear-gradient(145deg, #f7971e, #ffd200);
+    border-color: #ffd200;
+    color: #000 !important;
+    box-shadow: 0 0 25px rgba(255,210,0,0.6);
+  }
+  .btn-price .state { color: #000; font-weight: bold; }
+
+  .slider-box {
+    background: rgba(255,255,255,0.05);
+    padding: 15px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(0,255,255,0.3);
+  }
+  .slider-box label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 8px;
+    color: #ây00f5ff;
+  }
+  input[type=range] là {
+    width: 100%;
+    - appwebkit-appearance: none;
+    height: 6px;
+    demo border-radius: 3px;
+    background: linear-gradient,(90deg, #00f5ff, #ff không00e5);
+    outline: none;
+  }
+ có  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 10px #00f5ff;
+    cursor: pointer;
+  }
+
+  .cow-box {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    border: 1px dashed rgba(255,0,229,0.5);
+    margin-bottom: 20px;
+  }
+  .cow {
+    font-size: 60px;
+    animation: bounce 2s infinite;
+    display: inline-block;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .cow-name {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #ff00e5, #00f5ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 15px;
+    background: linear-gradient(90deg, #00ff88, #00f5ff, #ff00e5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: glow 2s infinite alternate;
+  }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>🎯 HỖ TRỢ KÉO TÂM PRO v3 🎯</h1>
+    <div class="status">Hệ thống đang hoạt động 100%</div>
+  </div>
+
+  <!-- 2 NÚT MỞ GAME -->
+  <div class="launch-box">
+    <a class="launch-btn btn-ffmax" href="freefiremax://" id="btnFFMax">
+      <span class="icon">🔥</span>
+      <span class="label">MỞ FF MAX</span>
+    </a>
+    <a class="launch-btn btn-ffthuong" href="freefire://" id="btnFFThuong">
+      <span class="icon">🎮</span>
+      <span class="label">MỞ FF THƯỜNG</span>
+    </a>
+  </div>
+
+  <div class="grid">
+    <div class="btn" id="btn1"><span class="icon">🎯</span>AIM LOCK<span class="state">OFF</span></div>
+    <div class="btn" id="btn2"><span class="icon">🧠</span>BÁM ĐẦU<span class="state">OFF</span></div>
+    <div class="btn" id="btn3"><span class="icon">✨</span>NHẸ TÂM<span class="state">OFF</span></div>
+    <div class="btn" id="btn4"><span class="icon">🛡️</span>CHỐNG LỐ<span class="state">OFF</span></div>
+    <div class="btn" id="btn5"><span class="icon">⚡</span>ĐẦM TÂM<span class="state">OFF</span></div>
+    <div class="btn" id="btn6"><span class="icon">🎚️</span>SENSI<span class="state">OFF</span></div>
+    <div class="btn btn-special" id="btn7"><span class="icon">👗</span>Buff Màn <span class="state">OFF</span></div>
+    <div class="btn btn-price" id="btn8"><span class="icon">🐰</span>Buff Màn 120<span class="state">SẴN SÀNG</span></div>
+  </div>
+
+  <div class="slider-box">
+    <label><span>🎯 Độ mạnh kéo tâm</span><span id="val1">75%</span></label>
+    <input type="range" min="0" max="100" value="75" id="s1">
+  </div>
+
+  <div class="slider-box">
+    <label><span>⚡ Tốc độ bám</span><span id="val2">60%</span></label>
+    <input type="range" min="0" max="100" value="60" id="s2">
+  </div>
+
+  <div class="slider-box">
+    <label><span>Nhạy Tâm</span><span id="val3">100%</span></label>
+    <input type="range" min="0" max="100" value="100" id="s3">
+  </div>
+
+  <div class="cow-box">
+    <div class="cow">🐄</div>
+    <div class="cow-name">THẦY BÒ ĐẸP TRAI</div>
+  </div>
+
+  <div class="footer">
+    ✅ ĐÃ KÍCH HOẠT - HOẠT ĐỘNG 100% ✅
+  </div>
+
+<script>
+  // Nút bật/tắt
+  document.querySelectorAll('.btn').forEach(b => {
+    b.addEventListener('click', () => {
+      b.classList.toggle('on');
+      const s = b.querySelector('.state');
+      if (b.id === 'btn8') {
+        // Nút Bunny hiện thông báo
+        if (b.classList.contains('on')) {
+          s.textContent = '✅ ĐÃ MUA';
+          alert('🐰 Đã kích hoạt Buff Màn 120!\n\n(Đ giao dịch thật)');
+        } else {
+          s.textContent = 'SẴN SÀNG';
+        }
+      } else if (b.id === 'btn7') {
+        s.textContent = b.classList.contains('on') ? 'ĐANG MẶC' : 'OFF';
+      } else {
+        s.textContent = b.classList.contains('on') ? 'ON' : 'OFF';
+      }
+      if (navigator.vibrate) navigator.vibrate(30);
+    });
+  });
+
+  // Slider
+  document.getElementById('s1').addEventListener('input', e => {
+    document.getElementById('val1').textContent = e.target.value + '%';
+  });
+  document.getElementById('s2').addEventListener('input', e => {
+    document.getElementById('val2').textContent = e.target.value + '%';
+  });
+  document.getElementById('s3').addEventListener('input', e => {
+    document.getElementById('val3').textContent = e.target.value + '%';
+  });
+
+  // Mở game
+  function openGame(scheme, appStoreLink, appName) {
+    const timeout = setTimeout(() => {
+      if (confirm('Không tìm thấy ' + appName + '. Mở App Store để tải không?')) {
+        window.location.href = appStoreLink;
+      }
+    }, 1500);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) clearTimeout(timeout);
+    });
+
+    window.location.href = scheme;
+  }
+
+  document.getElementById('btnFFMax').addEventListener('click', (e) => {
+    e.preventDefault();
+    openGame('freefiremax://', 'https://apps.apple.com/app/id1480516392', 'Free Fire MAX');
+  });
+
+  document.getElementById('btnFFThuong').addEventListener('click', (e) => {
+    e.preventDefault();
+    openGame('freefire://', 'https://apps.apple.com/app/id1300146617', 'Free Fire');
+  });
+</script>
+
+</body>
+</html>
